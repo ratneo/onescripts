@@ -61,7 +61,7 @@ EOF
 ssh_key_install() {
     wget --no-check-certificate https://raw.githubusercontent.com/wesleywxie/SSHKEY_Installer/master/key.sh
     bash key.sh wesleywxie
-    
+
     sed -i "/#Port 22/c Port 30022" sshd_config
     sed -i "/Port 22/c Port 30022" sshd_config
     service sshd restart
@@ -74,6 +74,7 @@ ssh_key_install() {
 cloudflare_doh_install() {
     bash <(curl -sL https://github.com/wikihost-opensource/centos-init/raw/main/network/dns-over-https/cloudflare.sh)
     rm wikihost_cloudflare_doh_install.log
+    chattr +i /etc/resolv.conf
     coloredEcho $GREEN " Cloudflare-DOH 安装完成"
 }
 
