@@ -12,16 +12,11 @@ coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
 }
 
-checkReady() {
+checkRoot() {
   result=$(id | awk '{print $1}')
   if [[ $result != "uid=0(root)" ]]; then
     coloredEcho $YELLOW " 请以root身份执行该脚本"
     exit 1
-  fi
-
-  if [[ ! -d /etc/letsencrypt/live ]]; then
-    coloredEcho $YELLOW " 请确保证书已通过certbot自主申请完毕"
-    return
   fi
 }
 
@@ -198,7 +193,7 @@ sysctl -p && sysctl --system
   coloredEcho $GREEN " 优化设置完成"
 }
 
-checkReady
+checkRoot
 remove_all_bbr_config
 startbbrfq
 optimizing_system
