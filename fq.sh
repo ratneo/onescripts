@@ -118,6 +118,10 @@ getCert() {
   certbot certonly --nginx -d $GRPC_DOMAIN
 }
 
+installWarp() {
+  bash <(curl -fsSL git.io/warp.sh) s5
+}
+
 configNginx() {
   mkdir -p /usr/share/nginx/html;
   if [[ "$ALLOW_SPIDER" = "n" ]]; then
@@ -504,6 +508,18 @@ configXray() {
       "tag": "blackhole",
       "protocol": "blackhole",
       "settings": {}
+    },
+    {
+      "tag": "warp",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 40000
+          }
+        ]
+       }
     }
   ],
   "routing": {
@@ -555,6 +571,10 @@ install() {
   apt clean all
   apt update -y
   apt install wget vim unzip tar gcc openssl net-tools libssl-dev g++ -y
+
+  echo ""
+  coloredEcho $BLUE " 安装warp..."
+  installWarp
 
   echo ""
   coloredEcho $BLUE " 安装nginx..."
