@@ -21,7 +21,7 @@ uninstall(){
   rm -rf /usr/local/etc/xray
   apt remove nginx nginx-common -y
   rm -rf /etc/nginx/nginx.conf
-  rm /etc/nginx/conf.d/*
+  rm -rf /etc/nginx/conf.d/*
 }
 
 read -p "确定要全部卸载吗 :" yn
