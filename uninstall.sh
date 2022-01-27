@@ -24,7 +24,7 @@ uninstall(){
   rm /etc/nginx/conf.d/*
 }
 
-read -p "确定要全部卸载吗" :" yn
+read -p "确定要全部卸载吗 :" yn
 [ -z "${yn}" ] && yn="y"
 if [[ $yn == [Yy] ]]; then
   uninstall
