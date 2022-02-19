@@ -106,7 +106,7 @@ getInput() {
   fi
   coloredEcho ${BLUE}  " ws路径：$WSPATH"
 
-  PROXY_URL="https://bing.imeizi.me"
+  PROXY_URL="https://bing.gifposter.com"
   REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
   ALLOW_SPIDER="n"
   coloredEcho ${BLUE}  " 伪装域名：$REMOTE_HOST"
