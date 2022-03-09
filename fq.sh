@@ -282,7 +282,7 @@ server {
 server {
     listen 10445 ssl http2;
     listen [::]:10445 ssl http2;
-    server_name ${GRPC_DOMAIN}; #修改成自己的域名
+    server_name ${GRPC_DOMAIN};
 
     ssl_certificate /etc/letsencrypt/live/${GRPC_DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${GRPC_DOMAIN}/privkey.pem;
