@@ -98,6 +98,10 @@ getInput() {
   coloredEcho $BLUE " 密码：$PASSWORD"
   
   echo ""
+  read -p " 请设置VMESS密码:" VMESS_PASSWORD
+  coloredEcho $BLUE " 密码：$VMESS_PASSWORD"
+  
+  echo ""
   read -p " 请输入伪装路径，以/开头(不懂请直接回车)：" WSPATH
   if [[ -z "${WSPATH}" ]]; then
       len=`shuf -i5-12 -n1`
@@ -469,7 +473,7 @@ configXray() {
       "settings": {
         "clients": [
           {
-            "id": "4fe457b3-6584-4648-a473-66f5e33000dd",
+            "id": "$VMESS_PASSWORD",
             "level": 1,
             "alterId": 0
           }
