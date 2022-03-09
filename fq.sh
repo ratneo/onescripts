@@ -502,7 +502,16 @@ configXray() {
     {
       "tag": "direct",
       "protocol": "freedom",
-      "settings": {}
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
+      "tag":"IP6_out",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIPv6"
+      }
     },
     {
       "tag": "blackhole",
@@ -520,6 +529,20 @@ configXray() {
           }
         ]
        }
+    },
+    {
+      "tag": "proxy",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "1.1.1.1",
+            "port": 61481,
+            "method": "chacha20-poly1305",
+            "password": "$PASSWORD"
+          }
+        ]
+      }
     }
   ],
   "routing": {
@@ -557,9 +580,13 @@ configXray() {
         "outboundTag": "direct",
         "domain": [
           "geosite:netflix",
-          "geosite:disney",
-          "us-west-2.amazonaws.com"
+          "amazonaws.com"
         ]
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "network": "udp,tcp"
       }
     ]
   }
