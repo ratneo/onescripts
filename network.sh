@@ -185,11 +185,19 @@ net.ipv4.udp_rmem_min=8192
 net.ipv4.udp_wmem_min=8192
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr" >>/etc/sysctl.conf
-sysctl -p && sysctl --system
 
-  echo "*               soft    nofile           1000000
-*               hard    nofile          1000000" >/etc/security/limits.conf
+  echo "* soft nofile 1048576 
+* hard nofile 1048576 
+* soft nproc 1048576 
+* hard nproc 1048576 
+* soft core 1048576 
+* hard core 1048576 
+* hard memlock unlimited 
+* soft memlock unlimited" >> /etc/security/limits.conf
+
   echo "ulimit -SHn 1000000" >>/etc/profile
+  
+sysctl -p && sysctl --system
   coloredEcho $GREEN " 优化设置完成"
 }
 
