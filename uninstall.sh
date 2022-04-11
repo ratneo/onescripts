@@ -19,6 +19,7 @@ uninstall(){
   rm -rf /etc/systemd/system/xray.service
   rm -rf /usr/local/bin/xray
   rm -rf /usr/local/etc/xray
+  rm -rf /usr/local/share/xray
   apt remove nginx nginx-common -y
   rm -rf /etc/nginx/nginx.conf
   rm -rf /etc/nginx/conf.d/*
