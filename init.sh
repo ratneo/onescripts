@@ -51,6 +51,10 @@ mode      = aggressive
 bantime   = 48h
 findtime  = 48h
 maxretry  = 3
+
+port    = ssh
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
 EOF
 
   fail2ban-client restart
@@ -61,8 +65,6 @@ ssh_key_install() {
   wget --no-check-certificate https://raw.githubusercontent.com/wesleywxie/SSHKEY_Installer/master/key.sh
   bash key.sh wesleywxie
 
-  sed -i "/#Port 22/c Port 30022" /etc/ssh/sshd_config
-  sed -i "/Port 22/c Port 30022" /etc/ssh/sshd_config
   service sshd restart
   service ssh restart
   systemctl restart sshd
