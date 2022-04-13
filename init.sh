@@ -44,9 +44,9 @@ fail2ban_install() {
   systemctl enable --now fail2ban
   
   mkdir -p /etc/nftables/
-    cat > /etc/nftables/fail2ban.conf <<-EOF
-    
-# Configure nftables for fail2ban
+  
+  # Configure nftables for fail2ban, nftables is the default for Debian 11+
+  cat > /etc/nftables/fail2ban.conf <<-EOF
 #!/usr/sbin/nft -f
 table ip fail2ban {
         chain input {
