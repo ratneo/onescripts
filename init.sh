@@ -42,6 +42,21 @@ EOF
 fail2ban_install() {
   apt install fail2ban -y
   systemctl enable --now fail2ban
+  
+  mkdir -p /etc/nftables/
+    cat > /etc/nftables/fail2ban.conf <<-EOF
+    
+# Configure nftables for fail2ban
+#!/usr/sbin/nft -f
+table ip fail2ban {
+        chain input {
+                type filter hook input priority 100;
+        }
+}
+EOF
+
+echo "include \"/etc/nftables/fail2ban.conf\"" >> /etc/nftables.conf
+nft -f /etc/nftables/fail2ban.conf
 
   cat > /etc/fail2ban/jail.local <<-EOF
 [sshd]
@@ -52,9 +67,8 @@ bantime   = 48h
 findtime  = 48h
 maxretry  = 3
 
-port    = ssh
-logpath = %(sshd_log)s
-backend = %(sshd_backend)s
+port    = 30022
+logpath = /var/log/auth.log
 EOF
 
   fail2ban-client restart
@@ -65,6 +79,8 @@ ssh_key_install() {
   wget --no-check-certificate https://raw.githubusercontent.com/wesleywxie/SSHKEY_Installer/master/key.sh
   bash key.sh wesleywxie
 
+  sed -i "/#Port 22/c Port 30022" /etc/ssh/sshd_config
+  sed -i "/Port 22/c Port 30022" /etc/ssh/sshd_config
   service sshd restart
   service ssh restart
   systemctl restart sshd
