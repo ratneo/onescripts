@@ -115,12 +115,12 @@ cloudflare_doh_install() {
 }
 
 worsttrace_install() {
-  wget -O /usr/local/bin/worsttrace "https://cdn.1717178.xyz/worsttrace" && chmod +x /usr/local/bin/worsttrace
+  wget -O /usr/local/bin/worsttrace "https://cdn.1717178.xyz/Tools/worsttrace" && chmod +x /usr/local/bin/worsttrace
   coloredEcho $GREEN " WorstTrace 安装完成"
 }
 
 besttrace_install() {
-  wget -O /usr/local/bin/besttrace "https://cdn.1717178.xyz/besttrace" && chmod +x /usr/local/bin/besttrace
+  wget -O /usr/local/bin/besttrace "https://cdn.1717178.xyz/Tools/besttrace" && chmod +x /usr/local/bin/besttrace
   coloredEcho $GREEN " BestTrace 安装完成"
 }
 
