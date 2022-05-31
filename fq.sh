@@ -195,12 +195,6 @@ stream {
         proxy_pass      \$sni;
         ssl_preread     on;
     }
-    server {
-        listen 2053      reuseport;
-        listen [::]:2053 reuseport;
-        proxy_pass      \$sni;
-        ssl_preread     on;
-    }
 }
 EOF
 
