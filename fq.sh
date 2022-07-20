@@ -11,7 +11,7 @@ PLAIN='\033[0m'
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
 NGINX_CONF_PATH="/etc/nginx/conf.d/"
 NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
-XRAY_VER="v1.5.4"
+XRAY_VER="v1.5.5"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
@@ -88,27 +88,9 @@ getInput() {
   coloredEcho ${BLUE}  " trojan伪装域名(host)：$TROJAN_DOMAIN"
 
   echo ""
-  read -p " 请输入grpc伪装域名：" GRPC_DOMAIN
-  DOMAIN=${GRPC_DOMAIN,,}
-  coloredEcho ${BLUE}  " trojan伪装域名(host)：$GRPC_DOMAIN"
-
-  echo ""
   read -p " 请设置连接密码（不输则随机生成）:" PASSWORD
   [[ -z "$PASSWORD" ]] && PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
   coloredEcho $BLUE " 密码：$PASSWORD"
-  
-  echo ""
-  read -p " 请设置VMESS密码:" VMESS_PASSWORD
-  coloredEcho $BLUE " 密码：$VMESS_PASSWORD"
-  
-  echo ""
-  read -p " 请输入伪装路径，以/开头(不懂请直接回车)：" WSPATH
-  if [[ -z "${WSPATH}" ]]; then
-      len=`shuf -i5-12 -n1`
-      ws=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $len | head -n 1`
-      WSPATH="/$ws"
-  fi
-  coloredEcho ${BLUE}  " ws路径：$WSPATH"
 
   PROXY_URL="https://bing.gifposter.com"
   REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
@@ -119,7 +101,6 @@ getInput() {
 
 getCert() {
   certbot certonly --nginx -d $TROJAN_DOMAIN
-  certbot certonly --nginx -d $GRPC_DOMAIN
 }
 
 configNginx() {
@@ -148,7 +129,6 @@ error_log /var/log/nginx/error.log;
 pid /run/nginx.pid;
 
 # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
-load_module /usr/lib/nginx/modules/ngx_stream_module.so;
 include /usr/share/nginx/modules/*.conf;
 
 events {
@@ -181,13 +161,9 @@ http {
 stream {
     map \$ssl_preread_server_name \$sni {
         ${TROJAN_DOMAIN}  trojan;
-        ${GRPC_DOMAIN}   grpc;
     }
     upstream trojan {
         server 127.0.0.1:10443;
-    }
-    upstream grpc {
-        server 127.0.0.1:10445;
     }
     server {
         listen 443      reuseport;
@@ -223,89 +199,7 @@ server {
     $ROBOT_CONFIG
 }
 EOF
-  if [[ "$PROXY_URL" = "" ]]; then
-    action=""
-  else
-    action="proxy_ssl_server_name on;
-    proxy_pass $PROXY_URL;
-    proxy_set_header Accept-Encoding '';
-    sub_filter \"$REMOTE_HOST\" \"$GRPC_DOMAIN\";
-    sub_filter_once off;"
-  fi
-  cat > ${NGINX_CONF_PATH}${GRPC_DOMAIN}.conf<<-EOF
-server {
-    listen 80;
-    listen [::]:80;
-    server_name ${GRPC_DOMAIN};
-    location ${WSPATH} {
-      proxy_redirect off;
-      proxy_pass http://127.0.0.1:44635;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-    location / {
-        $action
-    }
-    $ROBOT_CONFIG
-}
-
-server {
-    listen 2095;
-    listen [::]:2095;
-    server_name ${GRPC_DOMAIN};
-    location ${WSPATH} {
-      proxy_redirect off;
-      proxy_pass http://127.0.0.1:44635;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-    location / {
-        $action
-    }
-    $ROBOT_CONFIG
-}
-
-server {
-    listen 10445 ssl http2;
-    listen [::]:10445 ssl http2;
-    server_name ${GRPC_DOMAIN};
-
-    ssl_certificate /etc/letsencrypt/live/${GRPC_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${GRPC_DOMAIN}/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
-    location /grpc {
-        grpc_pass grpc://127.0.0.1:2010;
-    }
-
-    location ${WSPATH} {
-      proxy_redirect off;
-      proxy_pass http://127.0.0.1:44635;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade \$http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header Host \$host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-
-    location / {
-        $action
-    }
-    $ROBOT_CONFIG
-
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-}
-EOF
+  
 cat > ${NGINX_SERVICE_FILE}<<-EOF
 # Stop dance for nginx
 # =======================
@@ -433,51 +327,6 @@ configXray() {
       }
     },
     {
-      "port": 2010,
-      "listen": "127.0.0.1",
-      "protocol": "trojan",
-      "settings": {
-        "clients": [
-          {
-            "password":"$PASSWORD"
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "grpc",
-        "security": "none",
-        "grpcSettings": {
-          "serviceName": "grpc",
-          "multiMode": false,
-          "idle_timeout": 10,
-          "health_check_timeout": 20,
-          "permit_without_stream": false,
-          "initial_windows_size": 524288
-        }
-      }
-    },
-    {
-      "port": 44635,
-      "listen": "127.0.0.1",
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "$VMESS_PASSWORD",
-            "level": 1,
-            "alterId": 0
-          }
-        ],
-        "disableInsecureEncryption": false
-      },
-      "streamSettings": {
-        "network": "ws",
-        "wsSettings": {
-          "path": "$WSPATH"
-        }
-      }
-    },
-    {
       "port": 61481,
       "protocol": "shadowsocks",
       "settings": {
@@ -501,16 +350,16 @@ configXray() {
       }
     },
     {
+      "tag": "blackhole",
+      "protocol": "blackhole",
+      "settings": {}
+    },
+    {
       "tag":"IP6_out",
       "protocol": "freedom",
       "settings": {
         "domainStrategy": "UseIPv6"
       }
-    },
-    {
-      "tag": "blackhole",
-      "protocol": "blackhole",
-      "settings": {}
     },
     {
       "tag": "proxy",
