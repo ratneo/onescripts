@@ -129,6 +129,7 @@ error_log /var/log/nginx/error.log;
 pid /run/nginx.pid;
 
 # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+load_module /usr/lib/nginx/modules/ngx_stream_module.so;
 include /usr/share/nginx/modules/*.conf;
 
 events {
