@@ -279,8 +279,8 @@ server {
 }
 
 server {
-    listen 10445 ssl http2;
-    listen [::]:10445 ssl http2;
+    listen 127.0.0.1:10445 ssl http2;
+    listen [::1]:10445 ssl http2;
     server_name ${GRPC_DOMAIN};
 
     ssl_certificate /etc/letsencrypt/live/${GRPC_DOMAIN}/fullchain.pem;
