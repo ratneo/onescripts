@@ -91,6 +91,19 @@ getInput() {
   read -p " 请设置连接密码（不输则随机生成）:" PASSWORD
   [[ -z "$PASSWORD" ]] && PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
   coloredEcho $BLUE " 密码：$PASSWORD"
+  
+  echo ""
+  read -p " 请设置VMESS密码:" VMESS_PASSWORD
+  coloredEcho $BLUE " 密码：$VMESS_PASSWORD"
+  
+  echo ""
+  read -p " 请输入伪装路径，以/开头(不懂请直接回车)：" WSPATH
+  if [[ -z "${WSPATH}" ]]; then
+      len=`shuf -i5-12 -n1`
+      ws=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $len | head -n 1`
+      WSPATH="/$ws"
+  fi
+  coloredEcho ${BLUE}  " ws路径：$WSPATH"
 
   PROXY_URL="https://bing.gifposter.com"
   REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
@@ -187,7 +200,7 @@ EOF
     sub_filter_once off;"
   fi
 
-  cat > ${NGINX_CONF_PATH}${TROJAN_DOMAIN}.conf<<-EOF
+  cat > ${NGINX_CONF_PATH}trojan.conf<<-EOF
 server {
     listen 80;
     listen [::]:80;
@@ -200,6 +213,36 @@ server {
     $ROBOT_CONFIG
 }
 EOF
+
+if [[ "$PROXY_URL" = "" ]]; then
+    action=""
+  else
+    action="proxy_ssl_server_name on;
+    proxy_pass $PROXY_URL;
+    proxy_set_header Accept-Encoding '';
+    sub_filter \"$REMOTE_HOST\" \"$GRPC_DOMAIN\";
+    sub_filter_once off;"
+  fi
+  cat > ${NGINX_CONF_PATH}ws.conf<<-EOF
+server {
+    listen 2095;
+    listen [::]:2095;
+    server_name ${TROJAN_DOMAIN};
+    location ${WSPATH} {
+      proxy_redirect off;
+      proxy_pass http://127.0.0.1:44635;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \$http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host \$host;
+      proxy_set_header X-Real-IP \$remote_addr;
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+    location / {
+        $action
+    }
+    $ROBOT_CONFIG
+}
   
 cat > ${NGINX_SERVICE_FILE}<<-EOF
 # Stop dance for nginx
@@ -324,6 +367,27 @@ configXray() {
               "keyFile": "/etc/letsencrypt/live/$TROJAN_DOMAIN/privkey.pem"
             }
           ]
+        }
+      }
+    },
+    {
+      "port": 44635,
+      "listen": "127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "$VMESS_PASSWORD",
+            "level": 1,
+            "alterId": 0
+          }
+        ],
+        "disableInsecureEncryption": false
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "$WSPATH"
         }
       }
     },
