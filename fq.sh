@@ -228,7 +228,8 @@ server {
     }
     $ROBOT_CONFIG
 }
-  
+EOF
+
 cat > ${NGINX_SERVICE_FILE}<<-EOF
 # Stop dance for nginx
 # =======================
