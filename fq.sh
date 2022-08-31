@@ -197,6 +197,19 @@ server {
     }
     $ROBOT_CONFIG
 }
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name ${TROJAN_DOMAIN};
+    ssl_certificate /etc/letsencrypt/live/${TROJAN_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${TROJAN_DOMAIN}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    location / {
+        $action
+    }
+    $ROBOT_CONFIG
+}
 EOF
 
 if [[ "$PROXY_URL" = "" ]]; then
@@ -227,6 +240,34 @@ server {
         $action
     }
     $ROBOT_CONFIG
+}
+
+server {
+    listen 2096 ssl http2;
+    listen [::]:2096 ssl http2;
+    server_name ${TROJAN_DOMAIN};
+    ssl_certificate /etc/letsencrypt/live/${TROJAN_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${TROJAN_DOMAIN}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    location /grpc {
+        grpc_pass grpc://127.0.0.1:2010;
+    }
+    location ${WSPATH} {
+      proxy_redirect off;
+      proxy_pass http://127.0.0.1:44635;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \$http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host \$host;
+      proxy_set_header X-Real-IP \$remote_addr;
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+    location / {
+        $action
+    }
+    $ROBOT_CONFIG
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 }
 EOF
 
