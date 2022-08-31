@@ -142,7 +142,6 @@ error_log /var/log/nginx/error.log;
 pid /run/nginx.pid;
 
 # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
-load_module /usr/lib/nginx/modules/ngx_stream_module.so;
 include /usr/share/nginx/modules/*.conf;
 
 events {
@@ -171,20 +170,6 @@ http {
     # See http://nginx.org/en/docs/ngx_core_module.html#include
     # for more information.
     include /etc/nginx/conf.d/*.conf;
-}
-stream {
-    map \$ssl_preread_server_name \$sni {
-        ${TROJAN_DOMAIN}  trojan;
-    }
-    upstream trojan {
-        server 127.0.0.1:10443;
-    }
-    server {
-        listen 443      reuseport;
-        listen [::]:443 reuseport;
-        proxy_pass      \$sni;
-        ssl_preread     on;
-    }
 }
 EOF
 
@@ -334,8 +319,7 @@ configXray() {
   },
   "inbounds": [
     {
-      "port": 10443,
-      "listen": "127.0.0.1",
+      "port": 2053,
       "protocol": "trojan",
       "settings": {
         "clients": [
