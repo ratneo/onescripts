@@ -14,10 +14,6 @@ NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
 XRAY_VER="v1.5.5"
 
-TUIC_CONF_PATH="/opt/tuic"
-TUIC_CONFIG_FILE="/opt/tuic/config.json"
-TUIC_VER="0.8.1"
-
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
 }
@@ -581,58 +577,6 @@ configXray() {
 EOF
 }
 
-installTuic() {
-    rm -rf ${TUIC_CONF_PATH}
-    systemctl stop tuic
-    DOWNLOAD_LINK="https://github.com/EAimTY/tuic/releases/download/${TUIC_VER}/tuic-server-${TUIC_VER}-x86_64-linux-gnu"
-    coloredEcho $BLUE " 下载TUIC: ${DOWNLOAD_LINK}"
-    curl -L -H "Cache-Control: no-cache" -o /usr/local/bin/tuic ${DOWNLOAD_LINK}
-    if [ $? != 0 ];then
-        coloredEcho $RED " 下载TUIC文件失败，请检查服务器网络设置"
-        exit 1
-    fi
-    chmod +x /usr/local/bin/tuic || {
-        coloredEcho $RED " TUIC安装失败"
-        exit 1
-    }
-    
-
-    mkdir -p ${TUIC_CONF_PATH}
-    cat > $TUIC_CONFIG_FILE<<-EOF
-{
-    "port": 6121,
-    "token": ["$PASSWORD"],
-    "certificate": "/etc/letsencrypt/live/$GRPC_DOMAIN/fullchain.pem",
-    "private_key": "/etc/letsencrypt/live/$GRPC_DOMAIN/privkey.pem",
-    "ip": "0.0.0.0",
-    "congestion_controller": "bbr",
-    "alpn": ["h3"],
-    "log_level": "off"
-}
-EOF
-
-
-    cat >/etc/systemd/system/tuic.service<<-EOF
-[Unit]
-Description=Delicately-TUICed high-performance proxy built on top of the QUIC protocol
-Documentation=https://github.com/EAimTY/tuic
-After=network.target
-
-[Service]
-User=root
-WorkingDirectory=$TUIC_CONF_PATH
-ExecStart=/usr/local/bin/tuic -c config.json
-Restart=on-failure
-RestartPreventExitStatus=1
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-EOF
-    systemctl daemon-reload
-    systemctl enable --now tuic.service
-}
-
 install() {
   apt clean all
   apt update -y
@@ -653,9 +597,6 @@ install() {
   installXray
   configXray
   
-  coloredEcho $BLUE " 安装TUIC ${TUIC_VER}"
-  installTuic
-
   nginx -s stop
   systemctl start nginx
   systemctl restart xray
