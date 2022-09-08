@@ -35,7 +35,7 @@ deb http://deb.debian.org/debian bullseye-backports main
 deb-src http://deb.debian.org/debian bullseye-backports main
 EOF
   apt update -y && apt upgrade -y
-  apt install curl wget git less screen nftables vnstat xz-utils net-tools dnsutils mtr unzip iperf3 jq nethogs iftop lsof sudo certbot python3-certbot-nginx -y
+  apt install curl wget git less screen nftables vnstat xz-utils net-tools dnsutils mtr unzip iperf3 jq nethogs iftop lsof sudo systemd-timesyncd certbot python3-certbot-nginx -y
   coloredEcho $GREEN " 初始化完成"
 }
 
