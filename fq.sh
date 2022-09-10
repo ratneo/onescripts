@@ -250,9 +250,18 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/${TROJAN_DOMAIN}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
+    client_header_timeout 52w;
+    keepalive_timeout 52w;
     location /grpc {
         grpc_pass grpc://127.0.0.1:2010;
+	client_max_body_size 0;
+	client_body_buffer_size 512k;
+	grpc_set_header X-Real-IP $remote_addr;
+	client_body_timeout 52w;
+	grpc_read_timeout 52w;
     }
+    
     location ${WSPATH} {
       proxy_redirect off;
       proxy_pass http://127.0.0.1:44635;
@@ -412,11 +421,7 @@ configXray() {
         "security": "none",
         "grpcSettings": {
           "serviceName": "grpc",
-          "multiMode": false,
-          "idle_timeout": 10,
-          "health_check_timeout": 20,
-          "permit_without_stream": false,
-          "initial_windows_size": 524288
+          "multiMode": false
         }
       }
     },
