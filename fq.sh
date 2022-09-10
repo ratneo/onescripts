@@ -255,11 +255,11 @@ server {
     keepalive_timeout 52w;
     location /grpc {
         grpc_pass grpc://127.0.0.1:2010;
-	client_max_body_size 0;
-	client_body_buffer_size 512k;
-	grpc_set_header X-Real-IP $remote_addr;
-	client_body_timeout 52w;
-	grpc_read_timeout 52w;
+        client_max_body_size 0;
+        client_body_buffer_size 512k;
+        grpc_set_header X-Real-IP \$remote_addr;
+        client_body_timeout 52w;
+        grpc_read_timeout 52w;
     }
     
     location ${WSPATH} {
