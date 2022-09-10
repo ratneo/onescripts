@@ -397,6 +397,30 @@ configXray() {
       }
     },
     {
+      "port": 2010,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password":"$PASSWORD"
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "security": "none",
+        "grpcSettings": {
+          "serviceName": "grpc",
+          "multiMode": false,
+          "idle_timeout": 10,
+          "health_check_timeout": 20,
+          "permit_without_stream": false,
+          "initial_windows_size": 524288
+        }
+      }
+    },
+    {
       "port": 44635,
       "listen": "127.0.0.1",
       "protocol": "vmess",
