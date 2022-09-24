@@ -12,7 +12,7 @@ NGINX_CONF_PATH="/etc/nginx/conf.d/"
 NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
 
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
-XRAY_VER="v1.5.5"
+XRAY_VER="v1.6.0"
 
 HYSTERIA_CONF_PATH="/opt/hysteria"
 HYSTERIA_CONFIG_FILE="/opt/hysteria/config.json"
