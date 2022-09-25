@@ -132,9 +132,4 @@ cloudflare_doh_install
 besttrace_install
 worsttrace_install
 
-read -p "系统初始化完成，建议重启后安装BBR，是否现在重启 ? [Y/n] :" yn
-[ -z "${yn}" ] && yn="y"
-if [[ $yn == [Yy] ]]; then
-  echo -e "${Info} VPS 重启中..."
-  reboot
-fi
+coloredEcho $GREEN " 系统初始化完成，有些安装配置重启后生效"
