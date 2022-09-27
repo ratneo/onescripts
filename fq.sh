@@ -579,7 +579,7 @@ installHysteria() {
   "recv_window_conn": 15728640,
   "recv_window_client": 67108864,
   "max_conn_client": 4096,
-  "resolver": "udp://1.1.1.1:53",
+  "resolver": "udp://127.0.0.1:53",
   "resolve_preference": "4"
 }
 EOF
