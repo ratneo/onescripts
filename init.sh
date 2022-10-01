@@ -114,22 +114,10 @@ cloudflare_doh_install() {
   coloredEcho $GREEN " Cloudflare-DOH 安装完成"
 }
 
-worsttrace_install() {
-  wget -O /usr/local/bin/worsttrace "https://cdn.544555.xyz/Tools/worsttrace" && chmod +x /usr/local/bin/worsttrace
-  coloredEcho $GREEN " WorstTrace 安装完成"
-}
-
-besttrace_install() {
-  wget -O /usr/local/bin/besttrace "https://cdn.544555.xyz/Tools/besttrace" && chmod +x /usr/local/bin/besttrace
-  coloredEcho $GREEN " BestTrace 安装完成"
-}
-
 checkRoot
 apt_source
 fail2ban_install
 ssh_key_install
 cloudflare_doh_install
-besttrace_install
-worsttrace_install
 
 coloredEcho $GREEN " 系统初始化完成，有些安装配置重启后生效"
