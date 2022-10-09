@@ -569,7 +569,7 @@ installHysteria() {
     mkdir -p ${HYSTERIA_CONF_PATH}
     cat > $HYSTERIA_CONFIG_FILE<<-EOF
 {
-  "listen": ":6121",
+  "listen": ":2053",
   "cert": "/etc/letsencrypt/live/$TROJAN_DOMAIN/fullchain.pem",
   "key": "/etc/letsencrypt/live/$TROJAN_DOMAIN/privkey.pem",
   "obfs": "$PASSWORD",
