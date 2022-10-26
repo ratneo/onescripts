@@ -110,7 +110,7 @@ getInput() {
   fi
   coloredEcho ${BLUE}  " ws路径：$WSPATH"
 
-  PROXY_URL="https://bing.gifposter.com"
+  PROXY_URL="https://www.todaybing.com"
   REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
   ALLOW_SPIDER="n"
   coloredEcho ${BLUE}  " 伪装域名：$REMOTE_HOST"
@@ -223,7 +223,7 @@ if [[ "$PROXY_URL" = "" ]]; then
     action="proxy_ssl_server_name on;
     proxy_pass $PROXY_URL;
     proxy_set_header Accept-Encoding '';
-    sub_filter \"$REMOTE_HOST\" \"$GRPC_DOMAIN\";
+    sub_filter \"$REMOTE_HOST\" \"$TROJAN_DOMAIN\";
     sub_filter_once off;"
   fi
   cat > ${NGINX_CONF_PATH}ws.conf<<-EOF
