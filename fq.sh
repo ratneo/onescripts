@@ -14,10 +14,6 @@ NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
 XRAY_VER="v1.6.0"
 
-HYSTERIA_CONF_PATH="/opt/hysteria"
-HYSTERIA_CONFIG_FILE="/opt/hysteria/config.json"
-HYSTERIA_VER="v1.2.1"
-
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
 }
@@ -110,7 +106,7 @@ getInput() {
   fi
   coloredEcho ${BLUE}  " ws路径：$WSPATH"
 
-  PROXY_URL="https://www.todaybing.com"
+  PROXY_URL="https://bing.gifposter.com"
   REMOTE_HOST=`echo ${PROXY_URL} | cut -d/ -f3`
   ALLOW_SPIDER="n"
   coloredEcho ${BLUE}  " 伪装域名：$REMOTE_HOST"
@@ -487,6 +483,18 @@ configXray() {
       }
     },
     {
+      "tag": "wgcf",
+      "protocol": "freedom",
+      "streamSettings": {
+        "sockopt": {
+          "mark": 51888
+        }
+      },
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
       "tag": "proxy",
       "protocol": "shadowsocks",
       "settings": {
@@ -550,59 +558,6 @@ configXray() {
 EOF
 }
 
-installHysteria() {
-    rm -rf ${HYSTERIA_CONF_PATH}
-    systemctl stop hysteria
-    DOWNLOAD_LINK="https://github.com/HyNetwork/hysteria/releases/download/${HYSTERIA_VER}/hysteria-linux-amd64"
-    coloredEcho $BLUE " 下载Hysteria: ${DOWNLOAD_LINK}"
-    curl -L -H "Cache-Control: no-cache" -o /usr/local/bin/hysteria ${DOWNLOAD_LINK}
-    if [ $? != 0 ];then
-        coloredEcho $RED " 下载Hysteria执行文件失败，请检查服务器网络设置"
-        exit 1
-    fi
-    chmod +x /usr/local/bin/hysteria || {
-        coloredEcho $RED " Hysteria安装失败"
-        exit 1
-    }
-
-
-    mkdir -p ${HYSTERIA_CONF_PATH}
-    cat > $HYSTERIA_CONFIG_FILE<<-EOF
-{
-  "listen": ":2096",
-  "cert": "/etc/letsencrypt/live/$TROJAN_DOMAIN/fullchain.pem",
-  "key": "/etc/letsencrypt/live/$TROJAN_DOMAIN/privkey.pem",
-  "obfs": "$PASSWORD",
-  "alpn": "h3",
-  "up_mbps": 500,
-  "down_mbps": 500,
-  "recv_window_conn": 15728640,
-  "recv_window_client": 67108864,
-  "max_conn_client": 4096,
-  "resolver": "udp://127.0.0.1:53",
-  "resolve_preference": "4"
-}
-EOF
-
-
-    cat >/etc/systemd/system/hysteria.service<<-EOF
-[Unit]
-Description=Hysteria is a feature-packed proxy & relay utility powered by a customized QUIC protocol.
-Documentation=https://github.com/HyNetwork/hysteria/wiki
-After=network.target nss-lookup.target
-[Service]
-User=root
-NoNewPrivileges=true
-ExecStart=/usr/local/bin/hysteria -c /opt/hysteria/config.json server
-Restart=on-failure
-RestartPreventExitStatus=23
-[Install]
-WantedBy=multi-user.target
-EOF
-    systemctl daemon-reload
-    systemctl enable --now hysteria.service
-}
-
 install() {
   apt clean all
   apt update -y
@@ -622,10 +577,6 @@ install() {
   coloredEcho $BLUE " 安装Xray ${XRAY_VER} ，架构$(archAffix)"
   installXray
   configXray
-  
-  coloredEcho $BLUE " 安装Hysteria ${HYSTERIA_VER}"
-  installHysteria
-
 
   nginx -s stop
   systemctl start nginx
