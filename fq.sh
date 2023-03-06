@@ -12,7 +12,7 @@ NGINX_CONF_PATH="/etc/nginx/conf.d/"
 NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
 
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
-XRAY_VER="v1.7.2"
+XRAY_VER="v1.7.5"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
