@@ -14,7 +14,7 @@ BESTTRACE_FILE="/usr/local/bin/besttrace"
 myvar=$(pwd)
 TEMP_FILE='ip.test'
 
-test_area_w=("武汉电信" "武汉联通" "广州移动")
+test_area_w=("武汉电信" "武汉联通" "武汉移动")
 test_ip_w=("116.211.239.114" "113.57.53.1" "120.202.35.43")
 test_area_g=("广州电信" "广州联通" "广州移动")
 test_ip_g=("58.60.188.222" "210.21.196.6" "120.196.165.24")
@@ -110,6 +110,7 @@ startScript(){
     coloredEcho ${GREEN} " 3. 三网回程路由测试(预设上海)(平均运行1分钟)"
     coloredEcho ${GREEN} " 4. 三网回程路由测试(预设北京)(平均运行1分钟)"
     coloredEcho ${GREEN} " 5. 三网回程路由测试(预设成都)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 6. 完整的本机IP的IP质量检测(平均运行10~20秒)"
     echo "#############################################################"
     echo ""
     while true
@@ -121,6 +122,7 @@ startScript(){
             3) network_script_select 's' ; break ;;
             4) network_script_select 'b' ; break ;;
             5) network_script_select 'c' ; break ;;
+            6) bash <(wget -qO- --no-check-certificate https://gitlab.com/spiritysdx/za/-/raw/main/qzcheck.sh); break ;;
             *) echo "输入错误，请重新输入" ;;
         esac
     done
