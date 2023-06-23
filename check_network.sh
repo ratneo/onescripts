@@ -23,6 +23,12 @@ test_ip_b=("219.141.136.12" "202.106.50.1" "221.179.155.161")
 test_area_c=("成都电信" "成都联通" "成都移动")
 test_ip_c=("61.139.2.69" "119.6.6.6" "211.137.96.205")
 
+
+_red() { echo -e "\033[31m\033[01m$@\033[0m"; }
+_green() { echo -e "\033[32m\033[01m$@\033[0m"; }
+_yellow() { echo -e "\033[33m\033[01m$@\033[0m"; }
+_blue() { echo -e "\033[36m\033[01m$@\033[0m"; }
+
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
 }
@@ -88,7 +94,6 @@ network_script_select() {
         echo "Invalid argument, please use 'g', 's', 'b', or 'c'."
         return 1
     fi
-    end_script
 }
 
 
