@@ -95,10 +95,10 @@ network_script_select() {
 startScript(){
     clear
     echo "#############################################################"
-    coloredEcho ${GREEN}1.${PLAIN} 三网回程路由测试(预设广州)(平均运行1分钟)"
-    coloredEcho ${GREEN}2.${PLAIN} 三网回程路由测试(预设上海)(平均运行1分钟)"
-    coloredEcho ${GREEN}3.${PLAIN} 三网回程路由测试(预设北京)(平均运行1分钟)"
-    coloredEcho ${GREEN}4.${PLAIN} 三网回程路由测试(预设成都)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 1. 三网回程路由测试(预设广州)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 2. 三网回程路由测试(预设上海)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 3. 三网回程路由测试(预设北京)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 4. 三网回程路由测试(预设成都)(平均运行1分钟)"
     echo "#############################################################"
     echo ""
     while true
