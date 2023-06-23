@@ -45,7 +45,6 @@ checkRoot() {
 
 download_besttrace() {
     if [[ -f "$BESTTRACE_FILE" ]]; then
-        echo "besttrace exists, will skip download"
     else
         wget https://cdn.ipip.net/17mon/besttrace4linux.zip
         unzip -d $BESTTRACE_FOLDER besttrace4linux.zip "besttrace"
