@@ -45,6 +45,7 @@ checkRoot() {
 
 download_besttrace() {
     if [[ -f "$BESTTRACE_FILE" ]]; then
+        coloredEcho $GREEN " 已下载安装besttrace"
     else
         wget https://cdn.ipip.net/17mon/besttrace4linux.zip
         unzip -d $BESTTRACE_FOLDER besttrace4linux.zip "besttrace"
