@@ -14,6 +14,8 @@ BESTTRACE_FILE="/usr/local/bin/besttrace"
 myvar=$(pwd)
 TEMP_FILE='ip.test'
 
+test_area_w=("武汉电信" "武汉联通" "广州移动")
+test_ip_w=("116.211.239.114" "113.57.53.1" "120.202.35.43")
 test_area_g=("广州电信" "广州联通" "广州移动")
 test_ip_g=("58.60.188.222" "210.21.196.6" "120.196.165.24")
 test_area_s=("上海电信" "上海联通" "上海移动")
@@ -82,7 +84,10 @@ fscarmen_route_script(){
 network_script_select() {
     download_besttrace
     start_time=$(date +%s)
-    if [[ "$1" == "g" ]]; then
+    
+    if [[ "$1" == "w" ]]; then
+        fscarmen_route_script test_area_w[@] test_ip_w[@]
+    elif [[ "$1" == "g" ]]; then
         fscarmen_route_script test_area_g[@] test_ip_g[@]
     elif [[ "$1" == "s" ]]; then
         fscarmen_route_script test_area_s[@] test_ip_s[@]
@@ -100,20 +105,22 @@ network_script_select() {
 startScript(){
     clear
     echo "#############################################################"
-    coloredEcho ${GREEN} " 1. 三网回程路由测试(预设广州)(平均运行1分钟)"
-    coloredEcho ${GREEN} " 2. 三网回程路由测试(预设上海)(平均运行1分钟)"
-    coloredEcho ${GREEN} " 3. 三网回程路由测试(预设北京)(平均运行1分钟)"
-    coloredEcho ${GREEN} " 4. 三网回程路由测试(预设成都)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 1. 三网回程路由测试(预设武汉)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 2. 三网回程路由测试(预设广州)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 3. 三网回程路由测试(预设上海)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 4. 三网回程路由测试(预设北京)(平均运行1分钟)"
+    coloredEcho ${GREEN} " 5. 三网回程路由测试(预设成都)(平均运行1分钟)"
     echo "#############################################################"
     echo ""
     while true
     do
         read -rp "请输入选项:" StartInput
         case $StartInput in
-            1) network_script_select 'g' ; break ;;
-            2) network_script_select 's' ; break ;;
-            3) network_script_select 'b' ; break ;;
-            4) network_script_select 'c' ; break ;;
+            1) network_script_select 'w' ; break ;;
+            2) network_script_select 'g' ; break ;;
+            3) network_script_select 's' ; break ;;
+            4) network_script_select 'b' ; break ;;
+            5) network_script_select 'c' ; break ;;
             *) echo "输入错误，请重新输入" ;;
         esac
     done
