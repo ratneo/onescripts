@@ -10,7 +10,7 @@ PLAIN='\033[0m'
 
 HYSTERIA_CONF_PATH="/opt/hysteria"
 HYSTERIA_CONFIG_FILE="/opt/hysteria/config.json"
-HYSTERIA_VER="v1.2.1"
+HYSTERIA_VER="v1.3.5"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
