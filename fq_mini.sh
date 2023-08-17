@@ -173,6 +173,18 @@ configXray() {
       "settings": {}
     },
     {
+      "tag": "wgcf",
+      "protocol": "freedom",
+      "streamSettings": {
+        "sockopt": {
+          "mark": 51888
+        }
+      },
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      }
+    },
+    {
       "tag": "proxy",
       "protocol": "shadowsocks",
       "settings": {
