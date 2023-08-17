@@ -55,6 +55,7 @@ remove_all_bbr_config() {
   sed -i '/net.ipv4.tcp_ecn/d' /etc/sysctl.conf
   sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
   sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+  sed -i '/recv_window_client/d' /etc/sysctl.conf
   sed -i '/fs.file-max/d' /etc/sysctl.conf
   sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
   sed -i '/net.core.wmem_max/d' /etc/sysctl.conf
@@ -112,6 +113,7 @@ optimizing_system() {
   sed -i '/net.ipv4.tcp_retries2/d' /etc/sysctl.conf
   sed -i '/net.ipv4.tcp_slow_start_after_idle/d' /etc/sysctl.conf
   sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
+  sed -i '/recv_window_client/d' /etc/sysctl.conf
   sed -i '/fs.file-max/d' /etc/sysctl.conf
   sed -i '/fs.inotify.max_user_instances/d' /etc/sysctl.conf
   sed -i '/net.ipv4.tcp_syncookies/d' /etc/sysctl.conf
@@ -150,6 +152,7 @@ optimizing_system() {
 
   echo "net.ipv4.tcp_retries2 = 8
 net.ipv4.tcp_slow_start_after_idle = 0
+recv_window_client = 67108864
 fs.file-max = 1000000
 fs.inotify.max_user_instances = 8192
 net.ipv4.tcp_syncookies = 1
