@@ -448,6 +448,16 @@ configXray() {
       }
     },
     {
+      "tag":"socks",
+      "protocol": "socks",
+      "listen": "127.0.0.1",
+      "port": 7890,
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
       "port": 61481,
       "protocol": "shadowsocks",
       "settings": {
@@ -528,6 +538,13 @@ configXray() {
           "172.16.0.0/12"
         ],
         "outboundTag": "blackhole"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "socks"
+        ],
+        "outboundTag": "wgcf"
       },
       {
         "type": "field",
