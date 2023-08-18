@@ -204,7 +204,37 @@ sysctl -p && sysctl --system
   coloredEcho $GREEN " 优化设置完成"
 }
 
+#加入到启动项
+autostart() {
+  cat > /etc/systemd/system/rc-local.service <<EOF
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
+
+[Service]
+ Type=forking
+ ExecStart=/etc/rc.local start
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
+ SysVStartPriority=99
+
+[Install]
+ WantedBy=multi-user.target
+EOF
+
+  cat > /etc/rc.local <<EOF
+#!/bin/bash
+sysctl -p && sysctl --system
+exit 0
+EOF
+
+  chmod +x /etc/rc.local
+  systemctl enable rc-local
+}
+
 checkRoot
 remove_all_bbr_config
 startbbrfq
 optimizing_system
+autostart
