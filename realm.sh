@@ -51,7 +51,7 @@ install() {
         exit 1
     fi
     tar -xvf /tmp/realm/realm.tar.gz
-    mv /tmp/realm/realm /usr/local/bin
+    mv realm /usr/local/bin
     chmod +x /usr/local/bin/realm || {
         coloredEcho $RED " Realm安装失败"
         exit 1
