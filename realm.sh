@@ -94,6 +94,7 @@ EOF
 
     systemctl daemon-reload
     systemctl enable realm
+    systemctl start realm
     sleep 2
     coloredEcho $BLUE " 安装完成"
 }
