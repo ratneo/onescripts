@@ -61,8 +61,7 @@ install() {
         exit 1
     fi
     gunzip /tmp/gost/gost.gz
-    mv gost-linux-$(archAffix)-${GOST_VER} gost
-    mv gost /usr/local/bin
+    mv /tmp/gost/gost /usr/local/bin
     chmod +x /usr/local/bin/gost || {
         coloredEcho $RED " GOST安装失败"
         exit 1
