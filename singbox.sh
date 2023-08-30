@@ -62,7 +62,7 @@ installSBox() {
     fi
     systemctl stop sbox
     tar -xvf /tmp/sbox/sbox.tar.gz
-    mv sing-box /usr/local/bin
+    mv ./sing-box-${SBOX_VER}-linux-$(archAffix)/sing-box /usr/local/bin
     chmod +x /usr/local/bin/sing-box || {
         coloredEcho $RED " Sing-Box安装失败"
         exit 1
