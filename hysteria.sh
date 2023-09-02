@@ -36,7 +36,7 @@ archAffix(){
 installHysteria() {
     rm -rf ${HYSTERIA_CONF_PATH}
     systemctl stop hysteria
-    DOWNLOAD_LINK="https://github.com/apernet/hysteria/releases/download/${HYSTERIA_VER}/hysteria-linux-$(archAffix)"
+    DOWNLOAD_LINK="https://github.com/apernet/hysteria/releases/download/app%2F${HYSTERIA_VER}/hysteria-linux-$(archAffix)"
     coloredEcho $BLUE " 下载Hysteria: ${DOWNLOAD_LINK}"
     curl -L -H "Cache-Control: no-cache" -o /usr/local/bin/hysteria ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
@@ -66,14 +66,6 @@ masquerade:
   proxy:
     url: https://bing.gifposter.com/
     rewriteHost: true
-resolver:
-  type: udp
-  tcp:
-    addr: 127.0.0.1:53 
-    timeout: 4s 
-  udp:
-    addr: 127.0.0.1:53 
-    timeout: 4s
 outbounds:
   - name: outbound
     type: socks5
