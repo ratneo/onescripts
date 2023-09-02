@@ -33,6 +33,18 @@ archAffix(){
 	return 0
 }
 
+getInput() {
+  echo ""
+  read -p " 请输入域名：" TROJAN_DOMAIN
+  DOMAIN=${TROJAN_DOMAIN,,}
+  coloredEcho ${BLUE}  " trojan伪装域名(host)：$TROJAN_DOMAIN"
+
+  echo ""
+  read -p " 请设置连接密码（不输则随机生成）:" PASSWORD
+  [[ -z "$PASSWORD" ]] && PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
+  coloredEcho $BLUE " 密码：$PASSWORD"
+}
+
 installHysteria() {
     rm -rf ${HYSTERIA_CONF_PATH}
     systemctl stop hysteria
@@ -99,4 +111,6 @@ EOF
 
 
 coloredEcho $BLUE " 安装Hysteria ${HYSTERIA_VER}"
+
+getInput
 installHysteria
