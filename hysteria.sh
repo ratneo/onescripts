@@ -83,7 +83,6 @@ outbounds:
     type: socks5
     socks5:
       addr: 127.0.0.1:7890 
-}
 EOF
 
 
