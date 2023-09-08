@@ -41,7 +41,7 @@ echo "alias 'besttrace=besttrace -q 1'" >> /root/.bashrc
 ### yabs
 
 ```bash
-curl -sL yabs.sh | bash -s -- -i
+curl -sL yabs.sh | bash -s -- -5 -i
 ```
 
 ### 融合怪
