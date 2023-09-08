@@ -21,7 +21,7 @@ bash <(curl -Ls unlock.moe) -m 4
 
 ```bash
 bash -c "$(curl http://nexttrace-io-leomoe-api-a0.shop/nt_install_v1.sh)"
-echo "alias 'besttrace=nexttrace -M'" >> /root/.bashrc
+echo "alias 'besttrace=nexttrace -M --data-provider IPInfo'" >> /root/.bashrc
 source /root/.bashrc
 ```
 
