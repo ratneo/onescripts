@@ -5,8 +5,8 @@ echo "export LC_CTYPE=en_US.UTF-8" >> /root/.bashrc
 echo "export LC_ALL=en_US.UTF-8" >> /root/.bashrc
 source /root/.bashrc
 
-echo "Etc/UTC" > /etc/timezone 
-dpkg-reconfigure -f noninteractive tzdata
+ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+dpkg-reconfigure --frontend noninteractive tzdata
 ```
 
 ```bash
