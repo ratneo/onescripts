@@ -1,6 +1,6 @@
 #!/bin/bash
-# Install xray with configurations
-# Author: ratneo<https://ihost.wiki>
+# Install xray with shadowsocks only
+# Author: ratneo<https://yezim.com>
 
 RED="\033[31m"      # Error message
 GREEN="\033[32m"    # Success message
@@ -9,7 +9,7 @@ BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
-XRAY_VER="v1.7.5"
+XRAY_VER="v1.8.4"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"

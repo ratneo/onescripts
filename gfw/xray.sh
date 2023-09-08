@@ -12,7 +12,7 @@ NGINX_CONF_PATH="/etc/nginx/conf.d/"
 NGINX_SERVICE_FILE="/lib/systemd/system/nginx.service"
 
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
-XRAY_VER="v1.7.5"
+XRAY_VER="v1.8.4"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
@@ -376,8 +376,7 @@ configXray() {
       "settings": {
         "clients": [
           {
-            "password": "$PASSWORD",
-            "flow": "xtls-rprx-direct"
+            "password": "$PASSWORD"
           }
         ],
         "fallbacks": [
@@ -393,7 +392,7 @@ configXray() {
       },
       "streamSettings": {
         "network": "tcp",
-        "security": "xtls",
+        "security": "tls",
         "xtlsSettings": {
           "serverName": "$TROJAN_DOMAIN",
           "alpn": ["http/1.1", "h2"],
