@@ -1,4 +1,6 @@
   #!/bin/bash
+  # Install fail2ban with nftables
+  # Author: ratneo<https://yezim.com>
   apt install fail2ban -y
   systemctl enable --now fail2ban
   

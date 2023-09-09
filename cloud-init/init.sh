@@ -1,6 +1,6 @@
 #!/bin/bash
 # Init script. Initialize for debian bullseye with proper apt source and prepare the tools
-# Author: ratneo<https://ihost.wiki>
+# Author: ratneo<https://yezim.com>
 
 RED="\033[31m"      # Error message
 GREEN="\033[32m"    # Success message

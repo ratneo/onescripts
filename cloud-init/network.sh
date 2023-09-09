@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install BBR and BBR related configurations
-# Author: ratneo<https://ihost.wiki>
+# Author: ratneo<https://yezim.com>
 
 RED="\033[31m"      # Error message
 GREEN="\033[32m"    # Success message
