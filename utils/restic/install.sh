@@ -2,7 +2,7 @@
 # Init script. Initialize for debian bullseye with proper apt source and prepare the tools
 # Author: ratneo<https://yezim.com>
 
-apt install restic
+apt install restic -y
 
 curl https://rclone.org/install.sh | bash
 mkdir -p /root/.config/rclone/
