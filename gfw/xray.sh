@@ -393,7 +393,7 @@ configXray() {
       "streamSettings": {
         "network": "tcp",
         "security": "tls",
-        "xtlsSettings": {
+        "tlsSettings": {
           "serverName": "$TROJAN_DOMAIN",
           "alpn": ["http/1.1", "h2"],
           "certificates": [
