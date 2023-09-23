@@ -559,8 +559,7 @@ configXray() {
         "type": "field",
         "outboundTag": "direct",
         "domain": [
-          "geosite:netflix",
-          "amazonaws.com"
+          "geosite:netflix"
         ]
       },
       {
