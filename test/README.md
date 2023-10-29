@@ -38,6 +38,11 @@ echo "alias 'besttrace=besttrace -q 1'" >> /root/.bashrc
 
 ## Performance test
 
+### iperf3
+```bash
+iperf3 -s -p 65432 | echo Usage: iperf3 -c "$(curl -s ip.sb)" -p 65432 -t 60 -P 1 -R
+```
+
 ### yabs
 
 ```bash
