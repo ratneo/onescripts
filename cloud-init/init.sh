@@ -114,10 +114,20 @@ cloudflare_doh_install() {
   coloredEcho $GREEN " Cloudflare-DOH 安装完成"
 }
 
+dnscrypt_proxy_install() {
+  apt install dnscrypt-proxy
+  sudo sed -i "s/server_names = \['cloudflare'\]/server_names = \['google', 'cloudflare'\]/" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+  echo "nameserver 127.0.2.1" | sudo tee /etc/resolv.conf
+  chattr +i /etc/resolv.conf
+  systemctl restart dnscrypt-proxy
+  coloredEcho $GREEN " dnscrypt-proxy 安装完成"
+}
+
 checkRoot
 apt_source
 fail2ban_install
 ssh_key_install
-cloudflare_doh_install
+#cloudflare_doh_install
+dnscrypt_proxy_install
 
 coloredEcho $GREEN " 系统初始化完成，有些安装配置重启后生效"
