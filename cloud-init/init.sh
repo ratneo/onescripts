@@ -116,7 +116,7 @@ cloudflare_doh_install() {
 
 dnscrypt_proxy_install() {
   apt install dnscrypt-proxy
-  sudo sed -i "s/server_names = \['cloudflare'\]/server_names = \['google', 'cloudflare'\]/" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+  sudo sed -i "s/server_names = \['cloudflare'\]/server_names = \['cloudflare', 'google'\]/" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
   echo "nameserver 127.0.2.1" | sudo tee /etc/resolv.conf
   chattr +i /etc/resolv.conf
   systemctl restart dnscrypt-proxy
