@@ -126,7 +126,7 @@ dnscrypt_proxy_install() {
 smartdns_install() {
   wget -O smartdns-debian-all.deb "https://github.com/pymumu/smartdns/releases/download/Release43/smartdns.1.2023.08.11-1937.x86-debian-all.deb"
   dpkg -i smartdns-debian-all.deb && rm smartdns-debian-all.deb
-  cat > /etc/smartdns/smartdns.conf <<-EOF
+  cat >> /etc/smartdns/smartdns.conf <<-EOF
 
 # Cloudflare DoH
 server-https https://1.1.1.1/dns-query
