@@ -137,6 +137,7 @@ EOF
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf
   chattr +i /etc/resolv.conf
   systemctl restart smartdns
+  systemctl enable smartdns
   coloredEcho $GREEN " smartdns 安装完成"
 }
 
