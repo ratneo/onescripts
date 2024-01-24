@@ -145,6 +145,7 @@ apt_source
 fail2ban_install
 ssh_key_install
 #cloudflare_doh_install
-dnscrypt_proxy_install
+#dnscrypt_proxy_install
+smartdns_install
 
 coloredEcho $GREEN " 系统初始化完成，有些安装配置重启后生效"
