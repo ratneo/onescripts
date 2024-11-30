@@ -9,7 +9,7 @@ BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
 XRAY_CONFIG_FILE="/usr/local/etc/xray/config.json"
-XRAY_VER="v1.8.4"
+XRAY_VER="v1.8.24"
 
 coloredEcho() {
   echo -e "${1}${@:2}${PLAIN}"
