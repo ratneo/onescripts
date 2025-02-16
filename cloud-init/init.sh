@@ -133,7 +133,7 @@ smartdns_install() {
 # Cloudflare DoH
 server-https https://1.1.1.1/dns-query
 # Google DoH
-server-https https://dns.google/dns-query
+server-https https://8.8.4.4/dns-query
 
 EOF
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf
