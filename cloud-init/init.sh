@@ -22,17 +22,17 @@ checkRoot() {
 
 apt_source() {
   cat > /etc/apt/sources.list<<-EOF
-deb http://deb.debian.org/debian bullseye main
-#deb-src http://deb.debian.org/debian bullseye main
+deb http://deb.debian.org/debian bookworm main contrib
+#deb-src http://deb.debian.org/debian bookworm main contrib
 
-deb http://deb.debian.org/debian-security/ bullseye-security main
-#deb-src http://deb.debian.org/debian-security/ bullseye-security main
+deb http://deb.debian.org/debian-security/ bookworm-security main contrib
+#deb-src http://deb.debian.org/debian-security/ bookworm-security main contrib
 
-deb http://deb.debian.org/debian bullseye-updates main
-#deb-src http://deb.debian.org/debian bullseye-updates main
+deb http://deb.debian.org/debian bookworm-updates main contrib
+#deb-src http://deb.debian.org/debian bookworm-updates main contrib
 
-deb http://deb.debian.org/debian bullseye-backports main
-#deb-src http://deb.debian.org/debian bullseye-backports main
+deb http://deb.debian.org/debian bookworm-backports main contrib
+#deb-src http://deb.debian.org/debian bookworm-backports main contrib
 EOF
   apt update -y && apt upgrade -y
   apt install curl wget bash-completion emacs-nox git less screen nftables vnstat xz-utils net-tools dnsutils mtr unzip iperf3 jq nethogs iftop lsof sudo systemd-timesyncd certbot python3-certbot-nginx -y
